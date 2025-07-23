@@ -2883,8 +2883,7 @@ I'm a B.Tech Computer Science student (2026) with a focus on both cybersecurity 
                     }, 3000);
                 };
             }
-
-           function initTextReader() {
+            function initTextReader() {
     const readerBtn = document.getElementById('readerBtn');
     
     // Check if speech synthesis is supported
@@ -2896,7 +2895,15 @@ I'm a B.Tech Computer Science student (2026) with a focus on both cybersecurity 
 
     // Track if reading is in progress
     let isReading = false;
-    let utterance = null;
+    let currentUtterance = null;
+    let currentSectionIndex = 0;
+    const sections = [
+        { selector: '.hero-info', title: 'Hero Section' },
+        { selector: '.about-info', title: 'About Section' },
+        { selector: '.projects', title: 'Projects Section' },
+        { selector: '.terminal-section', title: 'Terminal Section' },
+        { selector: '.contact', title: 'Contact Section' }
+    ];
     
     readerBtn.addEventListener('click', function() {
         // Check if we're on a mobile device
@@ -2907,71 +2914,74 @@ I'm a B.Tech Computer Science student (2026) with a focus on both cybersecurity 
             window.speechSynthesis.cancel();
             this.innerHTML = '<i class="fas fa-volume-up"></i>';
             isReading = false;
+            currentSectionIndex = 0;
         } else {
             // Mobile-specific handling
             if (isMobile) {
-                // For mobile, we need user interaction to trigger speech
-                if (window.speechSynthesis.pending || window.speechSynthesis.speaking) {
-                    window.speechSynthesis.cancel();
-                }
-                
-                // Create a short utterance first to activate the API
+                // For mobile, we need to activate the API with a small utterance first
                 const activationUtterance = new SpeechSynthesisUtterance(" ");
+                activationUtterance.onend = function() {
+                    // Now we can start reading the actual content
+                    readNextSection();
+                };
                 window.speechSynthesis.speak(activationUtterance);
-                
-                // Then proceed with the actual content
-                setTimeout(() => {
-                    readAllContent();
-                }, 300);
             } else {
-                readAllContent();
+                // Desktop can start reading immediately
+                readNextSection();
             }
+            
+            this.innerHTML = '<i class="fas fa-stop"></i>';
+            isReading = true;
         }
     });
     
-    function readAllContent() {
-        // Get all text content from the page
-        const sections = [
-            document.querySelector('.hero-info'),
-            document.querySelector('.about-info'),
-            document.querySelector('.projects'),
-            document.querySelector('.terminal-section'),
-            document.querySelector('.contact')
-        ];
+    function readNextSection() {
+        if (currentSectionIndex >= sections.length) {
+            // All sections read
+            readerBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            isReading = false;
+            currentSectionIndex = 0;
+            return;
+        }
         
-        let fullText = '';
-        sections.forEach(section => {
-            if (section) {
-                fullText += section.textContent + '\n\n';
-            }
-        });
+        const section = sections[currentSectionIndex];
+        const sectionElement = document.querySelector(section.selector);
+        
+        if (!sectionElement) {
+            currentSectionIndex++;
+            readNextSection();
+            return;
+        }
         
         // Create speech synthesis utterance
         const utterance = new SpeechSynthesisUtterance();
-        utterance.text = fullText;
+        utterance.text = section.title + ". " + sectionElement.textContent;
         utterance.rate = 1;
         utterance.pitch = 1;
         utterance.volume = 1;
         
-        // Change icon while speaking
-        readerBtn.innerHTML = '<i class="fas fa-stop"></i>';
-        isReading = true;
-        
-        // Speak the text
-        window.speechSynthesis.speak(utterance);
-        
-        // When reading ends
+        // When this section ends, move to the next one
         utterance.onend = function() {
-            readerBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-            isReading = false;
+            currentSectionIndex++;
+            readNextSection();
         };
         
         // If there's an error
-        utterance.onerror = function() {
+        utterance.onerror = function(event) {
+            console.error("SpeechSynthesis error:", event);
             readerBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
             isReading = false;
-            alert("Text reading failed or Paused. Please try again or check your device settings.");
+            currentSectionIndex = 0;
+            
+            // Show error message only if not caused by user stopping
+            if (event.error !== 'interrupted') {
+                alert("Text reading failed. Please try again or check your device settings.");
+            }
         };
+        
+        // Speak the text
+        window.speechSynthesis.speak(utterance);
+        currentUtterance = utterance;
     }
 }
 
