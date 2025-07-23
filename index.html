@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alwin George | Cybersecurity Specialist</title>
@@ -2883,71 +2884,96 @@ I'm a B.Tech Computer Science student (2026) with a focus on both cybersecurity 
                 };
             }
 
-            // ====== Text Reader ======
-            function initTextReader() {
-                const readerBtn = document.getElementById('readerBtn');
-                
-                // Check if browser supports speech synthesis
-                if (!('speechSynthesis' in window)) {
-                    readerBtn.style.display = 'none';
-                    return;
+           function initTextReader() {
+    const readerBtn = document.getElementById('readerBtn');
+    
+    // Check if speech synthesis is supported
+    if (!('speechSynthesis' in window)) {
+        readerBtn.style.display = 'none';
+        console.log("Text-to-speech not supported in this browser.");
+        return;
+    }
+
+    // Track if reading is in progress
+    let isReading = false;
+    let utterance = null;
+    
+    readerBtn.addEventListener('click', function() {
+        // Check if we're on a mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isReading) {
+            // Stop reading
+            window.speechSynthesis.cancel();
+            this.innerHTML = '<i class="fas fa-volume-up"></i>';
+            isReading = false;
+        } else {
+            // Mobile-specific handling
+            if (isMobile) {
+                // For mobile, we need user interaction to trigger speech
+                if (window.speechSynthesis.pending || window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
                 }
                 
-                // Track if reading is in progress
-                let isReading = false;
-                let utterance = null;
+                // Create a short utterance first to activate the API
+                const activationUtterance = new SpeechSynthesisUtterance(" ");
+                window.speechSynthesis.speak(activationUtterance);
                 
-                readerBtn.addEventListener('click', function() {
-                    if (isReading) {
-                        // Stop reading
-                        window.speechSynthesis.cancel();
-                        this.innerHTML = '<i class="fas fa-volume-up"></i>';
-                        isReading = false;
-                    } else {
-                        // Get all text content from the page
-                        const sections = [
-                            document.querySelector('.hero-info'),
-                            document.querySelector('.about-info'),
-                            document.querySelector('.projects'),
-                            document.querySelector('.terminal-section'),
-                            document.querySelector('.contact')
-                        ];
-                        
-                        let fullText = '';
-                        sections.forEach(section => {
-                            if (section) {
-                                fullText += section.textContent + '\n\n';
-                            }
-                        });
-                        
-                        // Create speech synthesis utterance
-                        utterance = new SpeechSynthesisUtterance();
-                        utterance.text = fullText;
-                        utterance.rate = 1;
-                        utterance.pitch = 1;
-                        utterance.volume = 1;
-                        
-                        // Speak the text
-                        window.speechSynthesis.speak(utterance);
-                        
-                        // Change icon while speaking
-                        this.innerHTML = '<i class="fas fa-stop"></i>';
-                        isReading = true;
-                        
-                        // When reading ends
-                        utterance.onend = function() {
-                            readerBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                            isReading = false;
-                        };
-                        
-                        // If there's an error
-                        utterance.onerror = function() {
-                            readerBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                            isReading = false;
-                        };
-                    }
-                });
+                // Then proceed with the actual content
+                setTimeout(() => {
+                    readAllContent();
+                }, 300);
+            } else {
+                readAllContent();
             }
+        }
+    });
+    
+    function readAllContent() {
+        // Get all text content from the page
+        const sections = [
+            document.querySelector('.hero-info'),
+            document.querySelector('.about-info'),
+            document.querySelector('.projects'),
+            document.querySelector('.terminal-section'),
+            document.querySelector('.contact')
+        ];
+        
+        let fullText = '';
+        sections.forEach(section => {
+            if (section) {
+                fullText += section.textContent + '\n\n';
+            }
+        });
+        
+        // Create speech synthesis utterance
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.text = fullText;
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+        
+        // Change icon while speaking
+        readerBtn.innerHTML = '<i class="fas fa-stop"></i>';
+        isReading = true;
+        
+        // Speak the text
+        window.speechSynthesis.speak(utterance);
+        
+        // When reading ends
+        utterance.onend = function() {
+            readerBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            isReading = false;
+        };
+        
+        // If there's an error
+        utterance.onerror = function() {
+            readerBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            isReading = false;
+            alert("Text reading failed or Paused. Please try again or check your device settings.");
+        };
+    }
+}
 
             // ====== Scroll Down Indicator ======
             function initScrollDownIndicator() {
