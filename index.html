@@ -1896,10 +1896,10 @@
 
     <!-- Konami Code Message -->
     <div class="konami-message">
-        <h3>ACCESS GRANTED</h3>
-        <p>You've discovered the Konami Code Easter Egg!</p>
-        <p>As a cybersecurity specialist, I appreciate your attention to detail.</p>
-        <button class="close-btn">CLOSE TERMINAL</button>
+        <h3>HaHa 😁 </h3>
+        <p>This is just an  Easter Egg!</p>
+        <p>I appreciate your attention to detail.</p>
+        <button class="close-btn">CLOSE ME</button>
     </div>
 
     <!-- Header -->
@@ -2248,79 +2248,81 @@ I'm a B.Tech Computer Science student (2026) with a focus on both cybersecurity 
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="section contact">
-        <div class="container">
-            <div class="section-title">
-                <h2>Get In Touch</h2>
-                <p>
-                    Interested in collaborating or learning more about my work? I'm always open to discussing security projects and opportunities.
-                </p>
-            </div>
-            
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Email</h4>
-                            <a href="mailto:alwingeorge.main@gmail.com">alwingeorge.main@gmail.com</a>
-                        </div>
+<section id="contact" class="section contact">
+    <div class="container">
+        <div class="section-title">
+            <h2>Get In Touch</h2>
+            <p>
+                Interested in collaborating or learning more about my work? I'm always open to discussing security projects and opportunities.
+            </p>
+        </div>
+        
+        <div class="contact-content">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
                     </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Phone</h4>
-                            <a href="tel:+919778377182">+91 9778377182</a>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Location</h4>
-                            <p>Kerala, India</p>
-                        </div>
+                    <div class="contact-details">
+                        <h4>Email</h4>
+                        <a href="mailto:alwingeorge.main@gmail.com">alwingeorge.main@gmail.com</a>
                     </div>
                 </div>
                 
-                <div class="contact-form">
-                    <h3 class="form-title">Send Me a Message</h3>
-                    <form action="https://formspree.io/f/mdkgoznl" method="POST" class="contact__form">
-                        <div class="form-group">
-                            <input type="text" name="name" id="name" placeholder="Your Name" required>
-                            <label for="name">Your Name</label>
-                        </div>
-                        
-                        <div class="form-group">
-                            <input type="email" name="email" id="email" placeholder="Your Email" required>
-                            <label for="email">Your Email</label>
-                        </div>
-                        
-                        <div class="form-group">
-                            <input type="text" name="subject" id="subject" placeholder="Subject">
-                            <label for="subject">Subject</label>
-                        </div>
-                        
-                        <div class="form-group">
-                            <textarea name="message" id="message" placeholder="Your Message" required></textarea>
-                            <label for="message">Your Message</label>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary form-submit">
-                            Send Message <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </form>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h4>Phone</h4>
+                        <a href="tel:+919778377182">+91 9778377182</a>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h4>Location</h4>
+                        <p>Kerala, India</p>
+                    </div>
                 </div>
             </div>
+            
+            <div class="contact-form">
+                <h3 class="form-title">Send Me a Message</h3>
+                <form id="contactForm" action="https://formspree.io/f/xeozalro" method="POST">
+                    <div class="form-group">
+                        <input type="text" name="name" id="name" placeholder="Your Name" required>
+                        <label for="name">Your Name</label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="email" name="email" id="email" placeholder="Your Email" required>
+                        <label for="email">Your Email</label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" name="subject" id="subject" placeholder="Subject">
+                        <label for="subject">Subject</label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <textarea name="message" id="message" placeholder="Your Message" required></textarea>
+                        <label for="message">Your Message</label>
+                    </div>
+                    
+                    <div id="formStatus" class="form-status" style="display: none; margin-bottom: 1.5rem;"></div>
+                    
+                    <button type="submit" class="btn btn-primary form-submit">
+                        Send Message <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Footer -->
     <footer class="footer">
@@ -2439,27 +2441,58 @@ I'm a B.Tech Computer Science student (2026) with a focus on both cybersecurity 
             });
             
             // Form submission
-            const contactForm = document.querySelector('.contact__form');
+const contactForm = document.getElementById('contactForm');
+const formStatus = document.getElementById('formStatus');
+
+if (contactForm) {
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+        formStatus.style.display = 'none';
+        
+        try {
+            const formData = new FormData(this);
+            const response = await fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
             
-            if (contactForm) {
-                contactForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    const formData = new FormData(this);
-                    const submitBtn = this.querySelector('button[type="submit"]');
-                    
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
-                    
-                    // Simulate form submission
-                    setTimeout(() => {
-                        alert('Message sent successfully! I\'ll get back to you soon.');
-                        this.reset();
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = 'Send Message <i class="fas fa-paper-plane"></i>';
-                    }, 1500);
-                });
+            if (response.ok) {
+                // Success
+                formStatus.textContent = 'Message sent successfully! I will get back to you soon.';
+                formStatus.style.color = '#4BB543';
+                formStatus.style.display = 'block';
+                this.reset();
+            } else {
+                // Error
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to send message');
             }
+        } catch (error) {
+            // Network error or Formspree error
+            formStatus.textContent = `Error: ${error.message}. Please try again later or email me directly.`;
+            formStatus.style.color = '#ff4757';
+            formStatus.style.display = 'block';
+            console.error('Form submission error:', error);
+        } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+            
+            // Scroll to status message
+            formStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+}
             
             // Dark mode toggle functionality
             const themeToggle = document.getElementById('theme-toggle');
